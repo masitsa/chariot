@@ -32,6 +32,9 @@
                             </li>    
                             <li class="">
                                <a href="#contact">Contact</a>
+                            </li>      
+                            <li class="">
+                               <a href="#order">Order</a>
                             </li>              
                         </ul>  
                     </nav>

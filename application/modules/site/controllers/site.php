@@ -304,11 +304,11 @@ class Site extends CI_Controller
 	
 	function contact()
 	{
+		//get contact
 		$table = "contacts";
 		$where = "contacts_id = 1";
-		$items = "*";
-		$order = "contacts_id";
-		$data['contacts'] = $this->administration_model->select_entries_where($table, $where, $items, $order);
+		$this->db->where($where);
+		$contact_query = $this->db->get($table);
 		
 		/*
 			-----------------------------------------------------------------------------------------
@@ -322,28 +322,40 @@ class Site extends CI_Controller
 
 		if ($this->form_validation->run())
 		{
-			foreach($data['contacts'] as $cat){
-				$email = $cat->email;
+			if($contacts->num_rows() > 0)
+			{
+				//retrieve email
+				foreach($contacts->result() as $cat)
+				{	
+					$email = $cat->email;
+				}
+				
+				//send email
+				$this->load->library('email');
+	
+				$this->email->from($this->input->post('sender_email'), $this->input->post('sender_name'));
+				$this->email->to($email);
+				
+				$this->email->subject($this->input->post('subject'));
+				$this->email->message($this->input->post('message'));
+				
+				$this->email->send();
+				$this->session->set_userdata('message_success', "Your email has been sent.");
+				//echo $this->email->print_debugger();
+				redirect('home#contact');
 			}
-			$this->load->library('email');
-
-			$this->email->from($this->input->post('sender_email'), $this->input->post('sender_name'));
-			$this->email->to($email);
-			
-			$this->email->subject($this->input->post('subject'));
-			$this->email->message($this->input->post('message'));
-			
-			$this->email->send();
-			$_SESSION['contact_success'] = "Your email has been sent.";
-			//echo $this->email->print_debugger();
-			redirect('site/contact');
+		
+			else
+			{
+				$this->session->set_userdata('message_error', 'An internal error has occured. Could not send your email :-(');
+				redirect('home#contact');
+			}
 		}
 		
 		else
 		{
-			$this->load_head();
-			$this->load->view("contacts", $data);
-			$this->load_foot();
+			$this->session->set_userdata('message_error', validation_errors());
+			redirect('home#contact');
 		}
 	}
 	
@@ -461,5 +473,187 @@ class Site extends CI_Controller
 			$return = "<i>".$text. '</i><br/>';
 		}
 		echo $return;
+	}
+	
+	public function contact2()
+	{
+		//get contact
+		$table = "contacts";
+		$where = "contacts_id = 1";
+		$this->db->where($where);
+		$contact_query = $this->db->get($table);
+		
+		if($contact_query->num_rows() > 0)
+		{
+			//retrieve email
+			foreach($contact_query->result() as $cat)
+			{	
+				$email = $cat->email;
+			}
+		}
+		
+		else
+		{
+			$email = 'chariotstudio@gmail.com';
+		}
+		
+		//Your E-mail
+		$your_email = $email;
+		
+		//Default Subject if 'subject' field not specified
+		$default_subject = 'From Contact Form';
+		
+		//Message if 'name' field not specified
+		$name_not_specified = 'No Name';
+		
+		//Message if 'message' field not specified
+		$message_not_specified = 'No Message';
+		
+		//Message if e-mail sent successfully
+		$email_was_sent = 'Thanks, your message was successfully sent';
+		
+		//Message if e-mail not sent (server not configured)
+		$server_not_configured = 'Sorry, mail server not configured';
+		
+		///////////////////////////
+		//Contact Form Processing//
+		///////////////////////////
+		$errors = array();
+		if(isset($_POST['message']) and isset($_POST['name'])) {
+			if(!empty($_POST['name']))
+				$sender_name  = stripslashes(strip_tags(trim($_POST['name'])));
+			
+			if(!empty($_POST['message']))
+				$message      = stripslashes(strip_tags(trim($_POST['message'])));
+			
+			if(!empty($_POST['email']))
+				$sender_email = stripslashes(strip_tags(trim($_POST['email'])));
+			
+			if(!empty($_POST['subject']))
+				$subject      = stripslashes(strip_tags(trim($_POST['subject'])));
+		
+		
+			//Message if no sender name was specified
+			if(empty($sender_name)) {
+				$errors[] = $name_not_specified;
+			}
+		
+			//Message if no message was specified
+			if(empty($message)) {
+				$errors[] = $message_not_specified;
+			}
+		
+			$from = (!empty($sender_email)) ? 'From: '.$sender_email : '';
+		
+			$subject = (!empty($subject)) ? $subject : $default_subject;
+		
+			$message = (!empty($message)) ? wordwrap($message, 70) : '';
+		
+			//sending message if no errors
+			if(empty($errors)) {
+				if (mail($your_email, $subject, $message, $from)) {
+					echo $email_was_sent;
+				} else {
+					$errors[] = $server_not_configured;
+					echo implode('<br>', $errors );
+				}
+			} else {
+				echo implode('<br>', $errors );
+			}
+		} else {
+			// if "name" or "message" vars not send ('name' attribute of contact form input fields was changed)
+			echo '"name" and "message" variables were not received by server. Please check "name" attributes for your input fields';
+		}
+	}
+	
+	public function place_order()
+	{
+		//get contact
+		$table = "contacts";
+		$where = "contacts_id = 1";
+		$this->db->where($where);
+		$contact_query = $this->db->get($table);
+		
+		if($contact_query->num_rows() > 0)
+		{
+			//retrieve email
+			foreach($contact_query->result() as $cat)
+			{	
+				$email = $cat->email;
+			}
+		}
+		
+		else
+		{
+			$email = 'chariotstudio@gmail.com';
+		}
+		
+		//Your E-mail
+		$your_email = $email;
+		
+		//Default Subject if 'subject' field not specified
+		$default_subject = 'Photo Order';
+		
+		//Message if 'name' field not specified
+		$name_not_specified = 'No Name';
+		
+		//Message if 'message' field not specified
+		$message_not_specified = 'No Message';
+		
+		//Message if e-mail sent successfully
+		$email_was_sent = 'Thanks, your message was successfully sent';
+		
+		//Message if e-mail not sent (server not configured)
+		$server_not_configured = 'Sorry, mail server not configured';
+		
+		///////////////////////////
+		//Contact Form Processing//
+		///////////////////////////
+		$errors = array();
+		if(isset($_POST['message']) and isset($_POST['name'])) {
+			if(!empty($_POST['name']))
+				$sender_name  = stripslashes(strip_tags(trim($_POST['name'])));
+			
+			if(!empty($_POST['message']))
+				$message      = stripslashes(strip_tags(trim($_POST['message'])));
+			
+			if(!empty($_POST['email']))
+				$sender_email = stripslashes(strip_tags(trim($_POST['email'])));
+			
+			if(!empty($_POST['subject']))
+				$subject      = stripslashes(strip_tags(trim($_POST['subject'])));
+		
+		
+			//Message if no sender name was specified
+			if(empty($sender_name)) {
+				$errors[] = $name_not_specified;
+			}
+		
+			//Message if no message was specified
+			if(empty($message)) {
+				$errors[] = $message_not_specified;
+			}
+		
+			$from = (!empty($sender_email)) ? 'From: '.$sender_email : '';
+		
+			$subject = (!empty($subject)) ? $subject : $default_subject;
+		
+			$message = (!empty($message)) ? wordwrap($message, 70) : '';
+		
+			//sending message if no errors
+			if(empty($errors)) {
+				if (mail($your_email, $subject, $message, $from)) {
+					echo $email_was_sent;
+				} else {
+					$errors[] = $server_not_configured;
+					echo implode('<br>', $errors );
+				}
+			} else {
+				echo implode('<br>', $errors );
+			}
+		} else {
+			// if "name" or "message" vars not send ('name' attribute of contact form input fields was changed)
+			echo '"name" and "message" variables were not received by server. Please check "name" attributes for your input fields';
+		}
 	}
 }

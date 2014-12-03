@@ -55,7 +55,8 @@ jQuery(document).ready(function() {
         };
         //sending form data to PHP server if fields are not empty
         var request = $form.serialize();
-        var ajax = jQuery.post( "contact-form.php", request )
+		var site_url = $('#site_url').val();
+        var ajax = jQuery.post( site_url+"site/contact2", request )
             .done(function( data ) {
                 jQuery($form).find('[type="submit"]').attr('disabled', false).parent().append('<span class="contact-form-respond highlight">'+data+'</span>');
         })
