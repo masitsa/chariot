@@ -484,20 +484,21 @@ class Site extends CI_Controller
 		$this->db->where($where);
 		$contact_query = $this->db->get($table);
 		
-		if($contact_query->num_rows() > 0)
-		{
-			//retrieve email
-			foreach($contact_query->result() as $cat)
-			{	
-				$email = $cat->email;
-			}
-		}
+		// if($contact_query->num_rows() > 0)
+		// {
+		// 	//retrieve email
+		// 	foreach($contact_query->result() as $cat)
+		// 	{	
+		// 		$email = $cat->email;
+		// 	}
+		// }
 		
-		else
-		{
-			$email = 'chariotstudio@gmail.com';
-		}
-		
+		// else
+		// {
+		// 	 $email = 'chariotstudio@gmail.com';
+
+		// }
+		$email = 'chariotstudio@gmail.com';
 		//Your E-mail
 		$your_email = $email;
 		
@@ -552,12 +553,13 @@ class Site extends CI_Controller
 		
 			//sending message if no errors
 			if(empty($errors)) {
-				if (mail($your_email, $subject, $message, $from)) {
-					echo $email_was_sent;
-				} else {
-					$errors[] = $server_not_configured;
-					echo implode('<br>', $errors );
-				}
+				$this->sendMail($your_email, $subject, $message, $from);
+				// if (mail($your_email, $subject, $message, $from)) {
+				// 	echo $email_was_sent;
+				// } else {
+				// 	$errors[] = $server_not_configured;
+				// 	echo implode('<br>', $errors );
+				// }
 			} else {
 				echo implode('<br>', $errors );
 			}
@@ -575,20 +577,20 @@ class Site extends CI_Controller
 		$this->db->where($where);
 		$contact_query = $this->db->get($table);
 		
-		if($contact_query->num_rows() > 0)
-		{
-			//retrieve email
-			foreach($contact_query->result() as $cat)
-			{	
-				$email = $cat->email;
-			}
-		}
+		// if($contact_query->num_rows() > 0)
+		// {
+		// 	//retrieve email
+		// 	foreach($contact_query->result() as $cat)
+		// 	{	
+		// 		$email = $cat->email;
+		// 	}
+		// }
 		
-		else
-		{
-			$email = 'chariotstudio@gmail.com';
-		}
-		
+		// else
+		// {
+		// 	 $email = 'chariotstudio@gmail.com';
+		// }
+		$email = 'chariotstudio@gmail.com';
 		//Your E-mail
 		$your_email = $email;
 		
@@ -643,12 +645,9 @@ class Site extends CI_Controller
 		
 			//sending message if no errors
 			if(empty($errors)) {
-				if (mail($your_email, $subject, $message, $from)) {
-					echo $email_was_sent;
-				} else {
-					$errors[] = $server_not_configured;
-					echo implode('<br>', $errors );
-				}
+				$this->sendMail($your_email, $subject, $message, $from);
+				
+				
 			} else {
 				echo implode('<br>', $errors );
 			}
@@ -656,5 +655,49 @@ class Site extends CI_Controller
 			// if "name" or "message" vars not send ('name' attribute of contact form input fields was changed)
 			echo '"name" and "message" variables were not received by server. Please check "name" attributes for your input fields';
 		}
+	}
+
+
+	function sendMail($your_email, $subject, $message, $from)
+	{
+	 //    $config = Array(
+		//   'protocol' => 'smtp',
+		//   'smtp_host' => 'ssl://smtp.googlemail.com',
+		//   'smtp_port' => 465,
+		//   'smtp_user' => 'chariotstudio@gmail.com', // change it to yours
+		//   'smtp_pass' => 'Chariot.GM', // change it to yours
+		//   'mailtype' => 'html',
+		//   'charset' => 'iso-8859-1',
+		//   'wordwrap' => TRUE
+		// );
+
+  //       $this->load->library('email', $config);
+	 //    $this->email->set_newline("\r\n");
+	 //    $this->email->from($from); // change it to yours
+	 //    $this->email->to($your_email);// change it to yours
+	 //    $this->email->subject($subject);
+	 //    $this->email->message($message);
+	 //    if($this->email->send())
+	 //    {
+	 //      echo 'Email sent.';
+	 //    }
+	 //    else
+	 //    {
+	 //     show_error($this->email->print_debugger());
+	 //    }
+		$message='MESSAGE HERE';
+		$headers ='';
+		$your_email="chariotstudio@gmail.com";
+		$headers .= "Reply-To: Some One ".$your_email."\r\n"; 
+		    $headers .= "Return-Path: Some One ".$your_email."\r\n"; 
+		    $headers .= "From: Hello ha <".$from.">\r\n"; 
+		 
+		    $headers .= "Content-Type: text/plain\r\n"; 
+		    
+		$msgs .= "Hi sdasda, \n";
+		$msgs .= "".$message." \n";
+
+    mail($your_email, $subject, $msgs, $headers);
+    	echo 'Email sent.';
 	}
 }

@@ -136,7 +136,7 @@
                     </p>
                     <p class="contact-form-subject">
                         <label for="subject">Subject <span class="required">*</span></label>
-                        <input type="text" aria-required="true" size="30" name="subject" id="subject" class="form-control" value="Photo Order" readonly="readonly">
+                        <input type="text" aria-required="true" size="30" name="subject" id="subject" class="form-control" value="" readonly="readonly">
                     </p>
                     <p class="contact-form-message">
                         <label for="message">Order</label>
