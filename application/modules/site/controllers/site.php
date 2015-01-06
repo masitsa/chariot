@@ -30,6 +30,7 @@ class Site extends CI_Controller
 		//Retrieve active slides
 		$data['slides'] = $this->site_model->get_slides();
 		$data['services'] = $this->site_model->get_services();
+		$data['gallery_services'] = $this->site_model->get_gallery_services();
 		$data['gallery'] = $this->site_model->get_gallery();
 		$data['contacts'] = $this->site_model->get_contacts();
 		

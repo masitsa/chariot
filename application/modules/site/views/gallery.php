@@ -15,15 +15,16 @@
                             <span></span>
                         </a>
                         <?php
-							if($services->num_rows() > 0)
+							if($gallery_services->num_rows() > 0)
 							{
-								foreach($services->result() as $service)
+								foreach($gallery_services->result() as $service)
 								{
-									$service_name = $service->service_name;
+									$service_name2 = $service->service_name;
+									$service_name = str_replace(' ','',strtolower($service->service_name));
 									$service_id = $service->service_id;
 									?>
                                     <a href="#" data-filter=".<?php echo $service_name;?>" class="type-16">
-                                        <span><?php echo $service_name;?></span>
+                                        <span><?php echo $service_name2;?></span>
                                         <span></span>
                                     </a>
 									<?php
@@ -40,19 +41,20 @@
                             foreach($gallery->result() as $res)
                             {
                                 $gallery_name = $res->gallery_name;
-                                $service_id = $res->service_id;
+                                $service_id3 = $res->service_id;
                                 $gallery_image_name = $res->gallery_image_name;
 								$service_name = '';
 								
-								if($services->num_rows() > 0)
+								if($gallery_services->num_rows() > 0)
 								{
-									foreach($services->result() as $service)
+									foreach($gallery_services->result() as $service)
 									{
 										$service_id2 = $service->service_id;
 										
-										if($service_id == $service_id2)
+										if($service_id3 == $service_id2)
 										{
-											$service_name = $service->service_name;
+											$service_name = str_replace(' ','',strtolower($service->service_name));
+											break;
 										}
 									}
 								}

@@ -25,7 +25,7 @@ class Service_model extends CI_Model
 				$this->file_model->delete_file($service_path."\\thumbnail_".$image);
 			}
 			//Upload image
-			$response = $this->file_model->upload_file($service_path, 'service_image', $resize);
+			$response = $this->file_model->upload_file($service_path, 'service_image', $resize, 'height');
 			if($response['check'])
 			{
 				$file_name = $response['file_name'];

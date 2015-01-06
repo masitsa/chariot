@@ -24,6 +24,18 @@ class Site_model extends CI_Model
 		return $query;
 	}
 	
+	public function get_gallery_services()
+	{
+  		$table = "service, gallery";
+		$where = "gallery.gallery_status = 1 AND service.service_status = 1 AND gallery.service_id = service.service_id";
+		
+		$this->db->select('DISTINCT(service.service_name), service.service_id');
+		$this->db->where($where);
+		$query = $this->db->get($table);
+		
+		return $query;
+	}
+	
 	public function get_gallery()
 	{
   		$table = "gallery";

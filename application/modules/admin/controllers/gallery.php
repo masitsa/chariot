@@ -28,8 +28,8 @@ class Gallery extends admin {
 	*/
 	public function index() 
 	{
-		$where = 'gallery_id > 0';
-		$table = 'gallery';
+		$where = 'gallery.service_id = service.service_id';
+		$table = 'gallery, service';
 		$segment = 3;
 		//pagination
 		$this->load->library('pagination');

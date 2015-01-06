@@ -83,7 +83,7 @@ class File_model extends CI_Model
 	* 	@param string $field_name
 	*
 	*/
-	public function upload_file($upload_path, $field_name, $resize)
+	public function upload_file($upload_path, $field_name, $resize, $master_dim = 'width')
 	{
 		$config = array(
 				'allowed_types'	=> 'JPG|JPEG|jpg|jpeg|gif|png',
@@ -115,7 +115,7 @@ class File_model extends CI_Model
 					'source_image'  => $image_upload_data['full_path'], 
 					'width' => $resize['width'],
 					'height' => $resize['height'],
-					'master_dim' => 'width',
+					'master_dim' => $master_dim,
 					'maintain_ratio' => TRUE
 				);
 

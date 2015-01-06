@@ -35,7 +35,10 @@
                                         </div>
                                     </div>
                                 </a>
-        
+                                
+                                <h2 style="text-align:center;">
+                                	<?php echo $service_name;?>
+                                </h2>
                             </div>
                             <?php
                         }

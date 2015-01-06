@@ -57,7 +57,7 @@ class Gallery_model extends CI_Model
 		$this->db->from($table);
 		$this->db->select('*');
 		$this->db->where($where);
-		$this->db->order_by('gallery_name');
+		$this->db->order_by('service.service_name');
 		$query = $this->db->get('', $per_page, $page);
 		
 		return $query;
