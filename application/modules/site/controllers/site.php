@@ -530,7 +530,7 @@ class Site extends CI_Controller
 			
 			if(!empty($_POST['email']))
 				$sender_email = stripslashes(strip_tags(trim($_POST['email'])));
-			
+					$sender = $sender_email ;
 			if(!empty($_POST['subject']))
 				$subject      = stripslashes(strip_tags(trim($_POST['subject'])));
 		
@@ -553,7 +553,7 @@ class Site extends CI_Controller
 		
 			//sending message if no errors
 			if(empty($errors)) {
-				$this->sendMail($your_email, $subject, $message, $from);
+				$this->sendMail($your_email, $subject, $message, $sender);
 				// if (mail($your_email, $subject, $message, $from)) {
 				// 	echo $email_was_sent;
 				// } else {
@@ -622,7 +622,7 @@ class Site extends CI_Controller
 			
 			if(!empty($_POST['email']))
 				$sender_email = stripslashes(strip_tags(trim($_POST['email'])));
-			
+				$sender = $sender_email ;
 			if(!empty($_POST['subject']))
 				$subject      = stripslashes(strip_tags(trim($_POST['subject'])));
 		
@@ -645,7 +645,7 @@ class Site extends CI_Controller
 		
 			//sending message if no errors
 			if(empty($errors)) {
-				$this->sendMail($your_email, $subject, $message, $from);
+				$this->sendMail($your_email, $subject, $message, $sender);
 				
 				
 			} else {
@@ -660,44 +660,36 @@ class Site extends CI_Controller
 
 	function sendMail($your_email, $subject, $message, $from)
 	{
-	 //    $config = Array(
-		//   'protocol' => 'smtp',
-		//   'smtp_host' => 'ssl://smtp.googlemail.com',
-		//   'smtp_port' => 465,
-		//   'smtp_user' => 'chariotstudio@gmail.com', // change it to yours
-		//   'smtp_pass' => 'Chariot.GM', // change it to yours
-		//   'mailtype' => 'html',
-		//   'charset' => 'iso-8859-1',
-		//   'wordwrap' => TRUE
-		// );
+	    
 
-  //       $this->load->library('email', $config);
-	 //    $this->email->set_newline("\r\n");
-	 //    $this->email->from($from); // change it to yours
-	 //    $this->email->to($your_email);// change it to yours
-	 //    $this->email->subject($subject);
-	 //    $this->email->message($message);
-	 //    if($this->email->send())
-	 //    {
-	 //      echo 'Email sent.';
-	 //    }
-	 //    else
-	 //    {
-	 //     show_error($this->email->print_debugger());
-	 //    }
-		$message='MESSAGE HERE';
-		$headers ='';
-		$your_email="chariotstudio@gmail.com";
-		$headers .= "Reply-To: Some One ".$your_email."\r\n"; 
-		    $headers .= "Return-Path: Some One ".$your_email."\r\n"; 
-		    $headers .= "From: Hello ha <".$from.">\r\n"; 
-		 
-		    $headers .= "Content-Type: text/plain\r\n"; 
-		    
-		$msgs .= "Hi sdasda, \n";
-		$msgs .= "".$message." \n";
+		$config = Array(
+		    'protocol' => 'smtp',
+		    'smtp_host' => 'ssl://smtp.googlemail.com',
+		    'smtp_port' => 465,
+		    'smtp_user' => $your_email, // change it to yours
+		  	'smtp_pass' => 'Chariot.GM', // change it to yours
+		    'mailtype'  => 'html', 
+		    'charset'   => 'iso-8859-1'
+		);
+		$this->load->library('email', $config);
+		$this->email->set_newline("\r\n");
 
-    mail($your_email, $subject, $msgs, $headers);
-    	echo 'Email sent.';
+		// Set to, from, message, etc.
+		 $this->email->from('noreply@example.com'); // change it to yours
+	     $this->email->reply_to($from,'Alvaro');
+	    $this->email->to($your_email);// change it to yours
+	    $this->email->subject($subject);
+	    $this->email->message($message);
+		 if($this->email->send())
+	    {
+	      echo 'Email sent.';
+	    }
+	    else
+	    {
+	     show_error($this->email->print_debugger());
+	    }
+
+	    
+	    
 	}
 }
