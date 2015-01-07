@@ -413,7 +413,7 @@ class Site extends CI_Controller
 				'protocol'  => 'smtp',
 				'smtp_host' => 'smtp.gmail.com',
 				'smtp_port' => '465',
-				'smtp_user' => 'alvaromasitsa104@gmail.com',
+				'smtp_user' => 'chariotstudio@gmail.com',
 				'smtp_pass' => 'wadpass@',
 				'mailtype'  => 'html',
 				'starttls'  => true,
@@ -423,7 +423,7 @@ class Site extends CI_Controller
 			$this->load->library('email', $email_config);
 
 			$this->email->from($email, $names);
-			$this->email->to('alvaromasitsa104@gmail.com');
+			$this->email->to('chariotstudio@gmail.com');
 			$this->email->cc($email);
 			/*$this->email->bcc('them@their-example.com');*/
 			
@@ -530,7 +530,7 @@ class Site extends CI_Controller
 			
 			if(!empty($_POST['email']))
 				$sender_email = stripslashes(strip_tags(trim($_POST['email'])));
-					$sender = $sender_email ;
+			
 			if(!empty($_POST['subject']))
 				$subject      = stripslashes(strip_tags(trim($_POST['subject'])));
 		
@@ -553,13 +553,8 @@ class Site extends CI_Controller
 		
 			//sending message if no errors
 			if(empty($errors)) {
-				$this->sendMail($your_email, $subject, $message, $sender);
-				// if (mail($your_email, $subject, $message, $from)) {
-				// 	echo $email_was_sent;
-				// } else {
-				// 	$errors[] = $server_not_configured;
-				// 	echo implode('<br>', $errors );
-				// }
+				$this->sendMail($your_email, $subject, $message, $from, $sender_name);
+				
 			} else {
 				echo implode('<br>', $errors );
 			}
@@ -622,7 +617,7 @@ class Site extends CI_Controller
 			
 			if(!empty($_POST['email']))
 				$sender_email = stripslashes(strip_tags(trim($_POST['email'])));
-				$sender = $sender_email ;
+			
 			if(!empty($_POST['subject']))
 				$subject      = stripslashes(strip_tags(trim($_POST['subject'])));
 		
@@ -645,7 +640,7 @@ class Site extends CI_Controller
 		
 			//sending message if no errors
 			if(empty($errors)) {
-				$this->sendMail($your_email, $subject, $message, $sender);
+				$this->sendMail($your_email, $subject, $message, $from, $sender_name );
 				
 				
 			} else {
@@ -658,38 +653,19 @@ class Site extends CI_Controller
 	}
 
 
-	function sendMail($your_email, $subject, $message, $from)
+	function sendMail($your_email, $subject, $message, $from, $sender_name)
 	{
-	    
+	  
+		$email_infor=$your_email;
+		$headers = "MIME-Version: 1.0" . "\r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+		$headers .= $from."\r\n"; 
+		$msgs = '';
+		$msgs .= "Hi Admin, \n";
+		$msgs .= "".$message." \n";
+		mail($email_infor, $subject, $msgs ,$headers);
 
-		$config = Array(
-		    'protocol' => 'smtp',
-		    'smtp_host' => 'ssl://smtp.googlemail.com',
-		    'smtp_port' => 465,
-		    'smtp_user' => $your_email, // change it to yours
-		  	'smtp_pass' => 'Chariot.GM', // change it to yours
-		    'mailtype'  => 'html', 
-		    'charset'   => 'iso-8859-1'
-		);
-		$this->load->library('email', $config);
-		$this->email->set_newline("\r\n");
-
-		// Set to, from, message, etc.
-		 $this->email->from('noreply@example.com'); // change it to yours
-	     $this->email->reply_to($from,'Alvaro');
-	    $this->email->to($your_email);// change it to yours
-	    $this->email->subject($subject);
-	    $this->email->message($message);
-		 if($this->email->send())
-	    {
-	      echo 'Email sent.';
-	    }
-	    else
-	    {
-	     show_error($this->email->print_debugger());
-	    }
-
-	    
-	    
+    	echo 'Email sent.';
+    	
 	}
 }
